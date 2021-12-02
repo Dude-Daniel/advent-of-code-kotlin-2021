@@ -14,6 +14,7 @@ abstract class Day(val description: Description, body: DayDsl.() -> Unit) {
     }
 
     fun solve() {
+        println()
         print("It's Day ${description.value} - Task of the day: ${description.name}")
 
         puzzles.forEach { puzzle ->
