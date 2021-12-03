@@ -2,8 +2,18 @@ package de.devdudes.aoc.core
 
 /**
  * A collection of all puzzles for one day.
+ *
+ * @param description description of the day.
+ * @param ignored true if day is not implemented yet, else false.
+ * @param body a DSL for implementing the [Puzzle]s of this day.
  */
-abstract class Day(val description: Description, body: DayDsl.() -> Unit) {
+abstract class Day(private val description: Description, private val ignored: Boolean, body: DayDsl.() -> Unit) {
+
+    constructor(description: Description, body: DayDsl.() -> Unit) : this(
+        description = description,
+        ignored = false,
+        body = body,
+    )
 
     private val puzzles: List<Puzzle>
 
@@ -13,7 +23,14 @@ abstract class Day(val description: Description, body: DayDsl.() -> Unit) {
         puzzles = dayDsl.build()
     }
 
-    fun solve() {
+    /**
+     * Solves all puzzles of the given day.
+     *
+     * @return true if puzzles are solved, false if the day is ignored.
+     */
+    fun solve(): Boolean {
+        if (ignored) return false
+
         println()
         print("It's Day ${description.value} - Task of the day: ${description.name}")
 
@@ -42,6 +59,8 @@ abstract class Day(val description: Description, body: DayDsl.() -> Unit) {
                 }
             }
         }
+
+        return true
     }
 
     private val dayTag: String = "[Day ${description.value} - ${description.name}]"
