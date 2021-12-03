@@ -9,6 +9,8 @@ import java.io.File
  * @param input input data that needs to be solved.
  * @param testInput test input data for validating correctness of [solution].
  * @param expectedTestResult expected result for executing [solution] with [testInput].
+ * @param solutionResult result for [input]. Once provided it will make sure the [solution] works correctly.
+ * By default, no result is set, which means no evaluation is taking place (i.e. when implementing the solution).
  * @param solution the implementation of the solution for solving the puzzle.
  */
 class Puzzle(
@@ -16,6 +18,7 @@ class Puzzle(
     val input: String,
     val testInput: String,
     val expectedTestResult: Any,
+    val solutionResult: Any,
     val solution: (List<String>) -> Any,
 ) {
     fun test(): Any = solution(lines(testInput))

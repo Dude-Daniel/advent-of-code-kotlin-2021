@@ -13,6 +13,7 @@ class DayDsl {
         input: String,
         testInput: String,
         expectedTestResult: Any,
+        solutionResult: Any = Unit,
         solution: (List<String>) -> Any,
     ) {
         puzzles.add(
@@ -21,6 +22,7 @@ class DayDsl {
                 input = input,
                 testInput = testInput,
                 expectedTestResult = expectedTestResult,
+                solutionResult = solutionResult,
                 solution = solution,
             )
         )

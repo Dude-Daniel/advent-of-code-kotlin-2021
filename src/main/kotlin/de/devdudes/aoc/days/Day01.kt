@@ -5,10 +5,11 @@ import de.devdudes.aoc.core.minus
 
 class Day01 : Day(description = 1 - "Sonar Sweep", {
     puzzle(
-        description = 1 - "Part One",
+        description = 1 - "Simple Measurement",
         input = "day01",
         testInput = "day01_test",
         expectedTestResult = 7,
+        solutionResult = 1581,
         solution = { input ->
             input.map { it.toInt() }
                 .zipWithNext { a, b -> b > a }
@@ -17,10 +18,11 @@ class Day01 : Day(description = 1 - "Sonar Sweep", {
     )
 
     puzzle(
-        description = 2 - "Part Two",
+        description = 2 - "Sliding Window Measurement",
         input = "day01",
         testInput = "day01_test",
         expectedTestResult = 5,
+        solutionResult = 1618,
         solution = { input ->
             input.map { it.toInt() }
                 .windowed(3) { it.sum() }

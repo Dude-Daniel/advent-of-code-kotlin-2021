@@ -5,10 +5,11 @@ import de.devdudes.aoc.core.minus
 
 class Day02 : Day(description = 2 - "Dive!", {
     puzzle(
-        description = 1 - "Part One",
+        description = 1 - "Simple Navigation",
         input = "day02",
         testInput = "day02_test",
         expectedTestResult = 150,
+        solutionResult = 2187380,
         solution = { input ->
             class Course(private var position: Int = 0, private var depth: Int = 0) {
                 val result get() = position * depth
@@ -29,10 +30,11 @@ class Day02 : Day(description = 2 - "Dive!", {
     )
 
     puzzle(
-        description = 2 - "Part Two",
+        description = 2 - "Advanced Navigation",
         input = "day02",
         testInput = "day02_test",
         expectedTestResult = 900,
+        solutionResult = 2086357770,
         solution = { input ->
             class Course(private var position: Int = 0, private var depth: Int = 0, private var aim: Int = 0) {
                 val result get() = position * depth

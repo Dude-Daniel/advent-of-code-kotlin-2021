@@ -3,6 +3,7 @@ package de.devdudes.aoc
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.days.Day01
 import de.devdudes.aoc.days.Day02
+import de.devdudes.aoc.days.Day03
 
 fun main() {
     AdventOfCode2021().solveAllDays()
@@ -15,15 +16,14 @@ fun main() {
 class AdventOfCode2021 {
 
     fun solveAllDays() {
-        DAYS.forEach { day ->
-            day.solve()
-        }
+        DAYS.forEach { it.solve() }
     }
 
     companion object {
         private val DAYS: List<Day> = listOf(
             Day01(),
             Day02(),
+            Day03(),
         )
     }
 }
