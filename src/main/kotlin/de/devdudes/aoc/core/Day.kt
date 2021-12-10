@@ -1,5 +1,9 @@
 package de.devdudes.aoc.core
 
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import kotlin.system.measureTimeMillis
+
 /**
  * A collection of all puzzles for one day.
  *
@@ -7,7 +11,7 @@ package de.devdudes.aoc.core
  * @param ignored true if day is not implemented yet, else false.
  * @param body a DSL for implementing the [Puzzle]s of this day.
  */
-abstract class Day(private val description: Description, private val ignored: Boolean, body: DayDsl.() -> Unit) {
+abstract class Day(private val description: Description, val ignored: Boolean, body: DayDsl.() -> Unit) {
 
     constructor(description: Description, body: DayDsl.() -> Unit) : this(
         description = description,
@@ -34,33 +38,44 @@ abstract class Day(private val description: Description, private val ignored: Bo
         println()
         print("It's Day ${description.value} - Task of the day: ${description.name}")
 
-        puzzles.forEach { puzzle ->
-            with(puzzle) {
-                printPuzzle("Solving Puzzle ${puzzle.description.value} - ${puzzle.description.name}")
-                printPuzzle("Test Data - Expected Result: ${puzzle.expectedTestResult}")
-
-                val testResult = puzzle.test()
-                printPuzzle("Test Data - Actual Result: $testResult")
-
-                check(testResult == puzzle.expectedTestResult) {
-                    "Expected test result is incorrect -> solution is not implemented correctly."
+        val totalDuration = measureTimeMillis {
+            puzzles.forEach { puzzle ->
+                val puzzleDuration = measureTimeMillis {
+                    solvePuzzle(puzzle)
                 }
-                printPuzzle("Test Data - Success! - Solution is working.")
-
-                val result = puzzle.solve()
-                printPuzzle("Puzzle Data Result: $result")
-
-                if (puzzle.solutionResult != Unit) {
-                    check(result == puzzle.solutionResult) {
-                        "Expected puzzle solution is incorrect. Must be: ${puzzle.solutionResult}"
-                    }
-
-                    printPuzzle("Expected puzzle solution is correct.")
-                }
+                puzzle.printPuzzle("Solved in: ${formatDuration(puzzleDuration)}")
             }
         }
 
+        print("Day solved in: ${formatDuration(totalDuration)}")
+
         return true
+    }
+
+    private fun solvePuzzle(puzzle: Puzzle) {
+        with(puzzle) {
+            printPuzzle("Solving Puzzle ${puzzle.description.value} - ${puzzle.description.name}")
+            printPuzzle("Test Data - Expected Result: ${puzzle.expectedTestResult}")
+
+            val testResult = puzzle.test()
+            printPuzzle("Test Data - Actual Result: $testResult")
+
+            check(testResult == puzzle.expectedTestResult) {
+                "Expected test result is incorrect -> solution is not implemented correctly."
+            }
+            printPuzzle("Test Data - Success! - Solution is working.")
+
+            val result = puzzle.solve()
+            printPuzzle("Puzzle Data Result: $result")
+
+            if (puzzle.solutionResult != Unit) {
+                check(result == puzzle.solutionResult) {
+                    "Expected puzzle solution is incorrect. Must be: ${puzzle.solutionResult}"
+                }
+
+                printPuzzle("Expected puzzle solution is correct.")
+            }
+        }
     }
 
     private val dayTag: String = "[Day ${description.value} - ${description.name}]"
@@ -68,5 +83,10 @@ abstract class Day(private val description: Description, private val ignored: Bo
     private fun print(message: String) = println("$dayTag $message")
     private fun Puzzle.printPuzzle(message: String) {
         println("$dayTag [Puzzle ${description.value} - ${description.name}] $message")
+    }
+
+    private fun formatDuration(durationInMillis: Long): String {
+        val calendar = Calendar.getInstance().apply { timeInMillis = durationInMillis }
+        return SimpleDateFormat("mm:ss:SSS").format(calendar.time)
     }
 }

@@ -27,8 +27,24 @@ import de.devdudes.aoc.days.Day23
 import de.devdudes.aoc.days.Day24
 import de.devdudes.aoc.days.Day25
 
-fun main() {
-    AdventOfCode2021().solveAllDays()
+/**
+ * Object for defining the main function which solves all days which are implemented (days that are not ignored).
+ */
+object SolveAllDays {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        AdventOfCode2021().solveAllDays()
+    }
+}
+
+/**
+ * Object for defining the main function which solves only the last implemented day (the day that is not ignored).
+ */
+object SolveLastImplementedDay {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        AdventOfCode2021().solveLastImplementedDay()
+    }
 }
 
 /**
@@ -36,6 +52,10 @@ fun main() {
  * Solutions: https://github.com/Bogdanp/awesome-advent-of-code#kotlin
  */
 class AdventOfCode2021 {
+
+    fun solveLastImplementedDay() {
+        DAYS.last { !it.ignored }.solve()
+    }
 
     fun solveAllDays() {
         val ignoredDays = DAYS.mapNotNull { day ->
