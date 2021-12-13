@@ -30,9 +30,11 @@ class Day12 : Day(description = 12 - "Passage Pathing", {
     )
 })
 
-private sealed class Cave(open val name: String) {
-    data class Big(override val name: String) : Cave(name)
-    data class Small(override val name: String, val visited: Boolean = false, val visitCount: Int = 0) : Cave(name)
+private sealed class Cave() {
+    abstract val name: String
+
+    data class Big(override val name: String) : Cave()
+    data class Small(override val name: String, val visited: Boolean = false, val visitCount: Int = 0) : Cave()
 
     val isStartCave: Boolean by lazy { name == START }
 
