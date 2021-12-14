@@ -55,14 +55,18 @@ class AdventOfCode2021 {
 
     fun solveLastImplementedDay() {
         DAYS.last { !it.ignored }.solve()
+
+        printIgnoredDays()
     }
 
     fun solveAllDays() {
-        val ignoredDays = DAYS.mapNotNull { day ->
-            val solved = day.solve()
-            if (solved) null else day.javaClass.simpleName
-        }
+        DAYS.forEach { day -> day.solve() }
 
+        printIgnoredDays()
+    }
+
+    private fun printIgnoredDays() {
+        val ignoredDays = DAYS.filter { it.ignored }.map { it.javaClass.simpleName }
         if (ignoredDays.isNotEmpty()) {
             println()
             println("Ignored days (not implemented yet): $ignoredDays")
