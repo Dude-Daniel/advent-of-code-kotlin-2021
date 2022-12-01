@@ -1,6 +1,7 @@
 package de.devdudes.aoc.core
 
 import java.io.File
+import java.io.FileNotFoundException
 
 /**
  * A puzzle which needs to be solved.
@@ -21,12 +22,26 @@ class Puzzle(
     val solutionResult: Any,
     val solution: (List<String>) -> Any,
 ) {
-    fun test(): Any = solution(lines(testInput))
-    fun solve(): Any = solution(lines(input))
+    fun test(resourceFolder: String): Any = solution(
+        lines(
+            fileName = testInput,
+            resourceFolder = resourceFolder,
+        )
+    )
 
-    @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-    private fun lines(fileName: String): List<String> {
-        val uri = javaClass.classLoader.getResource("$fileName.txt").toURI()
+    fun solve(resourceFolder: String): Any = solution(
+        lines(
+            fileName = input,
+            resourceFolder = resourceFolder,
+        )
+    )
+
+    private fun lines(fileName: String, resourceFolder: String): List<String> {
+        val resourceFile = "$resourceFolder/$fileName.txt"
+        val resource = javaClass.classLoader.getResource(resourceFile)
+            ?: throw FileNotFoundException("resource file not found: resources/$resourceFile")
+
+        val uri = resource.toURI()
         return File(uri).readLines()
     }
 }

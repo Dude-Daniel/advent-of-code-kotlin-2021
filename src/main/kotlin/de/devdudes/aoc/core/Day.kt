@@ -9,21 +9,25 @@ import kotlin.system.measureTimeMillis
  *
  * @param description description of the day.
  * @param ignored true if day is not implemented yet, else false.
- * @param body a DSL for implementing the [Puzzle]s of this day.
+ * @param days a DSL for implementing the [Puzzle]s of this day.
  */
-abstract class Day(private val description: Description, val ignored: Boolean, body: DayDsl.() -> Unit) {
+abstract class Day(
+    private val description: Description,
+    val ignored: Boolean,
+    days: DayDsl.() -> Unit,
+) {
 
     constructor(description: Description, body: DayDsl.() -> Unit) : this(
         description = description,
         ignored = false,
-        body = body,
+        days = body,
     )
 
     private val puzzles: List<Puzzle>
 
     init {
         val dayDsl = DayDsl()
-        body(dayDsl)
+        days(dayDsl)
         puzzles = dayDsl.build()
     }
 
@@ -32,7 +36,7 @@ abstract class Day(private val description: Description, val ignored: Boolean, b
      *
      * @return true if puzzles are solved, false if the day is ignored.
      */
-    fun solve(): Boolean {
+    fun solve(resourceFolder: String): Boolean {
         if (ignored) return false
 
         println()
@@ -41,7 +45,10 @@ abstract class Day(private val description: Description, val ignored: Boolean, b
         val totalDuration = measureTimeMillis {
             puzzles.forEach { puzzle ->
                 val puzzleDuration = measureTimeMillis {
-                    solvePuzzle(puzzle)
+                    solvePuzzle(
+                        puzzle = puzzle,
+                        resourceFolder = resourceFolder,
+                    )
                 }
                 puzzle.printPuzzle("Solved in: ${formatDuration(puzzleDuration)}")
             }
@@ -52,12 +59,12 @@ abstract class Day(private val description: Description, val ignored: Boolean, b
         return true
     }
 
-    private fun solvePuzzle(puzzle: Puzzle) {
+    private fun solvePuzzle(puzzle: Puzzle, resourceFolder: String) {
         with(puzzle) {
             printPuzzle("Solving Puzzle ${puzzle.description.value} - ${puzzle.description.name}")
             printPuzzle("Test Data - Expected Result: ${puzzle.expectedTestResult}")
 
-            val testResult = puzzle.test()
+            val testResult = puzzle.test(resourceFolder)
             printPuzzle("Test Data - Actual Result: $testResult")
 
             check(testResult == puzzle.expectedTestResult) {
@@ -65,7 +72,7 @@ abstract class Day(private val description: Description, val ignored: Boolean, b
             }
             printPuzzle("Test Data - Success! - Solution is working.")
 
-            val result = puzzle.solve()
+            val result = puzzle.solve(resourceFolder)
             printPuzzle("Puzzle Data Result: $result")
 
             if (puzzle.solutionResult != Unit) {
