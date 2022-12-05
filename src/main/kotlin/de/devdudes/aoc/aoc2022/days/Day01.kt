@@ -5,11 +5,11 @@ import de.devdudes.aoc.core.minus
 import de.devdudes.aoc.helpers.splitWhen
 
 class Day01 : Day(
-    description = 1 - "Unknown",
+    description = 1 - "Calorie Counting",
     ignored = false,
     days = {
         puzzle(
-            description = 1 - "Unknown",
+            description = 1 - "Elf with most calories",
             input = "day01",
             testInput = "day01_test",
             expectedTestResult = 24000L,
@@ -23,7 +23,7 @@ class Day01 : Day(
         )
 
         puzzle(
-            description = 2 - "Unknown",
+            description = 2 - "Top Three Elves with most calories",
             input = "day01",
             testInput = "day01_test",
             expectedTestResult = 45000L,
