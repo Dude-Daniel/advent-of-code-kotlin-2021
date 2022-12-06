@@ -2,6 +2,7 @@ package de.devdudes.aoc.aoc2021.days
 
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.minus
+import de.devdudes.aoc.helpers.transpose
 
 class Day04 : Day(description = 4 - "Giant Squid", {
 
@@ -119,10 +120,4 @@ private class BingoBoard(lines: List<String>) {
 
 class BingoValue(val value: Int, var marked: Boolean = false) {
     override fun toString(): String = "($value, $marked)"
-}
-
-fun <T> List<List<T>>.transpose(): List<List<T>> {
-    val result = (first().indices).map { mutableListOf<T>() }.toMutableList()
-    forEach { list -> result.zip(list).forEach { it.first.add(it.second) } }
-    return result
 }
