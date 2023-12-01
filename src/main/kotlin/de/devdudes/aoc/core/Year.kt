@@ -4,7 +4,7 @@ abstract class Year(val resourceFolder: String) {
 
     abstract val days: List<Day>
     fun solveLastImplementedDay() {
-        days.last { !it.ignored }.solve(resourceFolder)
+        days.lastOrNull { !it.ignored }?.solve(resourceFolder)
 
         printIgnoredDays(days)
     }
