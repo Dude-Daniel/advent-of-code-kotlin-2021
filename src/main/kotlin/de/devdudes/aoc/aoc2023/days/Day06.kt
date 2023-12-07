@@ -51,7 +51,7 @@ private fun parseSingleBoatRaceRecord(input: List<String>): BoatRaceRecord =
         line.substringAfter(":").replace(" ", "").toBigInteger()
     }.let { (time, distance) -> BoatRaceRecord(time = time, distance = distance) }
 
-data class BoatRaceRecord(val time: BigInteger, val distance: BigInteger) {
+private data class BoatRaceRecord(val time: BigInteger, val distance: BigInteger) {
 
     fun calculateWaysToBeatCurrentDistance(): Int {
         // skip first and last time as they result in 0 value anyway
