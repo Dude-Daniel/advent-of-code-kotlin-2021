@@ -29,8 +29,7 @@ import de.devdudes.aoc.aoc2022.days.Day25
 import de.devdudes.aoc.core.Year
 
 /**
- * Event: https://adventofcode.com/
- * Solutions: https://github.com/Bogdanp/awesome-advent-of-code#kotlin
+ * Event: https://adventofcode.com/2022
  */
 class AdventOfCode2022 : Year(resourceFolder = "2022") {
 

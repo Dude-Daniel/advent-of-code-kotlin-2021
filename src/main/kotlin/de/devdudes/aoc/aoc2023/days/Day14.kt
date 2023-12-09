@@ -2,7 +2,6 @@ package de.devdudes.aoc.aoc2023.days
 
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.minus
-import java.math.BigInteger
 
 class Day14 : Day(
     description = 14 - "Unknown",

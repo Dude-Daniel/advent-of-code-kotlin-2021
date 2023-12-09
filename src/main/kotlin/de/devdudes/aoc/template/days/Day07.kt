@@ -2,7 +2,6 @@ package de.devdudes.aoc.template.days
 
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.minus
-import kotlin.math.abs
 
 class Day07 : Day(
     description = 7 - "Unknown",

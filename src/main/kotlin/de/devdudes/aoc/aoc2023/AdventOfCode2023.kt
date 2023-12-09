@@ -30,8 +30,7 @@ import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.Year
 
 /**
- * Event: https://adventofcode.com/
- * Solutions: https://github.com/Bogdanp/awesome-advent-of-code#kotlin
+ * Event: https://adventofcode.com/2023
  */
 class AdventOfCode2023 : Year(resourceFolder = "2023") {
 

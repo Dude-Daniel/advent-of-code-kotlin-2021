@@ -2,9 +2,6 @@ package de.devdudes.aoc.aoc2023.days
 
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.minus
-import java.math.BigInteger
-import java.util.Stack
-import kotlin.math.ceil
 
 class Day10 : Day(
     description = 10 - "Unknown",
