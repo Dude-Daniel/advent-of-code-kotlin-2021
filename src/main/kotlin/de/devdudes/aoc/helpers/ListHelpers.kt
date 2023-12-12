@@ -14,3 +14,16 @@ fun <T> List<List<T>>.transpose(): List<List<T>> {
     forEach { list -> result.zip(list).forEach { it.first.add(it.second) } }
     return result
 }
+
+/**
+ * Duplicates the entries specified by the [predicate].
+ */
+fun <T : Any> List<List<T>>.duplicateEntry(predicate: (List<T>) -> Boolean): List<List<T>> =
+    map { line ->
+        buildList {
+            add(line)
+            // add the same line again if it does not contain a galaxy
+            if (predicate(line)) add(line)
+        }
+    }.flatten()
+
