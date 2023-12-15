@@ -27,3 +27,13 @@ fun <T : Any> List<List<T>>.duplicateEntry(predicate: (List<T>) -> Boolean): Lis
         }
     }.flatten()
 
+fun <T> List<List<T>>.printGrid(
+    separator: CharSequence = "",
+    map: (T) -> String = { it.toString() },
+):List<List<T>> = apply {
+    println()
+    forEach { row ->
+        row.joinToString(separator = separator) { map(it) }
+            .let(::println)
+    }
+}
