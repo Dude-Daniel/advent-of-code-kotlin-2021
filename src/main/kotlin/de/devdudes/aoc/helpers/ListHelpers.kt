@@ -9,6 +9,12 @@ fun <T : Any> List<T>.splitWhen(predicate: (T) -> Boolean): List<List<T>> =
         }
     }.windowed(size = 2, step = 2) { (from, to) -> this.slice(from..to) }
 
+inline fun <T, R> List<List<T>>.mapAll(transform: (T) -> R): List<List<R>> =
+    this.map { row -> row.map { transform(it) } }
+
+fun <T> List<List<T>>.toMutableNestedList(): MutableList<MutableList<T>> =
+    this.map { row -> row.toMutableList() }.toMutableList()
+
 fun <T> List<List<T>>.transpose(): List<List<T>> {
     val result = (first().indices).map { mutableListOf<T>() }.toMutableList()
     forEach { list -> result.zip(list).forEach { it.first.add(it.second) } }
@@ -30,7 +36,7 @@ fun <T : Any> List<List<T>>.duplicateEntry(predicate: (List<T>) -> Boolean): Lis
 fun <T> List<List<T>>.printGrid(
     separator: CharSequence = "",
     map: (T) -> String = { it.toString() },
-):List<List<T>> = apply {
+): List<List<T>> = apply {
     println()
     forEach { row ->
         row.joinToString(separator = separator) { map(it) }
