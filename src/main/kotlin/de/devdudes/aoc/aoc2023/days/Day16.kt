@@ -2,9 +2,13 @@ package de.devdudes.aoc.aoc2023.days
 
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.minus
+import de.devdudes.aoc.helpers.Grid2D
+import de.devdudes.aoc.helpers.MutableGrid2D
 import de.devdudes.aoc.helpers.Point
-import de.devdudes.aoc.helpers.mapAll
-import de.devdudes.aoc.helpers.toMutableNestedList
+import de.devdudes.aoc.helpers.emptyGrid
+import de.devdudes.aoc.helpers.mapValues
+import de.devdudes.aoc.helpers.toGrid
+import de.devdudes.aoc.helpers.toMutableGrid
 
 class Day16 : Day(
     description = 16 - "The Floor Will Be Lava - Number of energized tiles",
@@ -42,17 +46,16 @@ class Day16 : Day(
 
 private fun parseContraption(input: List<String>): Contraption =
     input.map { row ->
-        row.toCharArray()
-            .map(Char::toContraptionTile)
-    }.let(::Contraption)
+        row.toCharArray().map(Char::toContraptionTile)
+    }.toGrid().let(::Contraption)
 
-private data class Contraption(val grid: List<List<ContraptionTile>>) {
+private data class Contraption(val grid: Grid2D<ContraptionTile>) {
 
     fun maximumEnergizedContraption(): SolvedContraption {
-        val rows = grid.size
-        val columns = grid.first().size
+        val rows = grid.rows
+        val columns = grid.columns
 
-        var result = SolvedContraption(emptyList())
+        var result = SolvedContraption(emptyGrid())
 
         // energize all left edge tiles to right direction
         for (y in 0 until rows) {
@@ -82,8 +85,8 @@ private data class Contraption(val grid: List<List<ContraptionTile>>) {
     }
 
     fun energize(startPoint: Point, startDirection: BeamDirection): SolvedContraption {
-        val tiles = grid.mapAll { SolvedContraptionTile(tile = it, energizedDirections = emptySet()) }
-            .toMutableNestedList()
+        val tiles = grid.mapValues { SolvedContraptionTile(tile = it, energizedDirections = emptySet()) }
+            .toMutableGrid()
 
         emitBeam(
             tiles = tiles,
@@ -95,7 +98,7 @@ private data class Contraption(val grid: List<List<ContraptionTile>>) {
     }
 
     private fun emitBeam(
-        tiles: MutableList<MutableList<SolvedContraptionTile>>,
+        tiles: MutableGrid2D<SolvedContraptionTile>,
         direction: BeamDirection,
         position: Point,
     ) {
@@ -103,13 +106,13 @@ private data class Contraption(val grid: List<List<ContraptionTile>>) {
         var currentDirection = direction
 
         while (true) {
-            val currentTile = tiles.getOrNull(currentPosition.y)?.getOrNull(currentPosition.x)
+            val currentTile = tiles.getOrNull(currentPosition)
 
             if (currentTile == null || currentTile.isEnergized(currentDirection)) {
                 break
             }
 
-            tiles[currentPosition.y][currentPosition.x] = currentTile.energize(currentDirection)
+            tiles[currentPosition] = currentTile.energize(currentDirection)
 
             val newDirections = currentTile.tile.passBeam(currentDirection)
             if (newDirections.size == 1) {
@@ -140,13 +143,9 @@ private fun Point.nextPosition(direction: BeamDirection) =
     }
 
 
-private data class SolvedContraption(val grid: List<List<SolvedContraptionTile>>) {
+private data class SolvedContraption(val grid: Grid2D<SolvedContraptionTile>) {
 
-    val energizedTileCount: Int by lazy {
-        grid.sumOf { row ->
-            row.count { it.isEnergized }
-        }
-    }
+    val energizedTileCount: Int by lazy { grid.count { it.isEnergized } }
 }
 
 private data class SolvedContraptionTile(
