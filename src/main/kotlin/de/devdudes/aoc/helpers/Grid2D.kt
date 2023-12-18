@@ -16,6 +16,18 @@ inline fun <T, R> Grid2D<T>.mapValues(transform: (T) -> R): Grid2D<R> =
 fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
 
+// Util functions
+
+fun <T> Grid2D<T>.print(
+    separator: CharSequence = "",
+    map: (T) -> String = { it.toString() },
+): Grid2D<T> = apply { getRawValues().printGrid(separator = separator, map = map) }
+
+fun <T> Grid2D<T>.printIndexed(
+    separator: CharSequence = "",
+    map: (Point, T) -> String,
+): Grid2D<T> = apply { getRawValues().printGridIndexed(separator = separator, map = map) }
+
 // Grid API interfaces and classes
 
 interface Grid2D<out T> : Collection<T> {
@@ -37,8 +49,15 @@ interface Grid2D<out T> : Collection<T> {
      */
     val lastPoint: Point?
 
+    /**
+     * The last point (max x/y) in the grid.
+     */
+    val requireLastPoint: Point
+
     operator fun get(point: Point): T
     fun getOrNull(point: Point): T?
+
+    fun contains(point: Point): Boolean
 }
 
 interface MutableGrid2D<T> : Grid2D<T> {
@@ -61,9 +80,13 @@ abstract class Grid2DBase<T> : Grid2D<T> {
     override val lastPoint: Point? by lazy {
         if (isEmpty()) null else Point(x = getRawValues().first().size - 1, y = getRawValues().size - 1)
     }
+    override val requireLastPoint: Point by lazy { lastPoint ?: throw NoSuchElementException() }
 
     override operator fun get(point: Point): T = getRawValues()[point.y][point.x]
     override fun getOrNull(point: Point): T? = getRawValues().getOrNull(point.y)?.getOrNull(point.x)
+
+    override fun contains(point: Point): Boolean =
+        point.x in 0 until columns && point.y in 0 until rows
 }
 
 data class Grid2DImpl<T>(val values: List<List<T>>) : Grid2DBase<T>() {
@@ -99,4 +122,3 @@ private class Grid2DIterator<T>(private val grid2D: Grid2D<T>) : Iterator<T> {
         return value
     }
 }
-

@@ -3,7 +3,10 @@ package de.devdudes.aoc.aoc2023.days
 import de.devdudes.aoc.aoc2023.days.Pipe.Companion.toPipe
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.minus
+import de.devdudes.aoc.helpers.Direction
 import de.devdudes.aoc.helpers.Point
+import de.devdudes.aoc.helpers.minus
+import de.devdudes.aoc.helpers.move
 
 class Day10 : Day(
     description = 10 - "Pipe Maze",
@@ -146,7 +149,7 @@ private data class PipeMaze(private val coordinates: List<List<Pipe>>) {
         // search for next points until the start is reached
         while (currentPoint != startPoint) {
             lastDirection = (get(currentPoint).connections - lastDirection.invert()).first()
-            currentPoint = currentPoint.move(direction = lastDirection, steps = 1)
+            currentPoint = currentPoint.move(direction = lastDirection, distance = 1)
 
             if (currentPoint != startPoint) {
                 points.add(
@@ -283,26 +286,4 @@ private sealed class Pipe {
             else -> None
         }
     }
-}
-
-private fun Point.move(direction: Direction, steps: Int = 1): Point =
-    when (direction) {
-        Direction.TOP -> Point(x, y - steps)
-        Direction.BOTTOM -> Point(x, y + steps)
-        Direction.LEFT -> Point(x - steps, y)
-        Direction.RIGHT -> Point(x + steps, y)
-    }
-
-private operator fun Point.minus(other: Point): Point = Point(x = x - other.x, y = y - other.y)
-
-private enum class Direction {
-    TOP, BOTTOM, LEFT, RIGHT;
-
-    fun invert(): Direction =
-        when (this) {
-            TOP -> BOTTOM
-            BOTTOM -> TOP
-            LEFT -> RIGHT
-            RIGHT -> LEFT
-        }
 }

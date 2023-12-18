@@ -37,9 +37,19 @@ fun <T> List<List<T>>.printGrid(
     separator: CharSequence = "",
     map: (T) -> String = { it.toString() },
 ): List<List<T>> = apply {
-    println()
     forEach { row ->
         row.joinToString(separator = separator) { map(it) }
+            .let(::println)
+    }
+}
+
+fun <T> List<List<T>>.printGridIndexed(
+    separator: CharSequence = "",
+    map: (Point, T) -> String,
+): List<List<T>> = apply {
+    forEachIndexed { y, row ->
+        row.mapIndexed { x, char -> map(Point(x, y), char) }
+            .joinToString(separator = separator)
             .let(::println)
     }
 }
