@@ -8,6 +8,17 @@ fun <T> List<List<T>>.toGrid(): Grid2D<T> = Grid2D(this)
 fun <T> Grid2D(values: List<List<T>>): Grid2D<T> = Grid2DImpl(values)
 fun <T> MutableGrid2D(values: List<List<T>>): MutableGrid2D<T> = MutableGrid2DImpl(values.toMutableNestedList())
 
+inline fun <T> Grid2D(columns: Int, rows: Int, init: (point: Point) -> T): Grid2D<T> =
+    MutableGrid2D(columns = columns, rows = rows, init = init)
+
+inline fun <T> MutableGrid2D(columns: Int, rows: Int, init: (point: Point) -> T): MutableGrid2D<T> {
+    return MutableList(rows) { y ->
+        MutableList(columns) { x ->
+            init(Point(x = x, y = y))
+        }
+    }.let(::MutableGrid2D)
+}
+
 // mapping functions
 
 inline fun <T, R> Grid2D<T>.mapValues(transform: (T) -> R): Grid2D<R> =
@@ -16,7 +27,18 @@ inline fun <T, R> Grid2D<T>.mapValues(transform: (T) -> R): Grid2D<R> =
 fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
 
-// Util functions
+// foreach functions
+
+inline fun <T> Grid2D<T>.forEachIndexed(action: (point: Point, T) -> Unit) {
+    for (x in 0 until columns) {
+        for (y in 0 until rows) {
+            val point = Point(x = x, y = y)
+            action(Point(x = x, y = y), get(point))
+        }
+    }
+}
+
+// print functions
 
 fun <T> Grid2D<T>.print(
     separator: CharSequence = "",
