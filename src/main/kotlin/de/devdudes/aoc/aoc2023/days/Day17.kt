@@ -60,7 +60,7 @@ private fun parseCityMap(input: List<String>): CityMap =
         row.map { it.digitToInt() }
     }.toGrid().let(::CityMap)
 
-data class CityPointData(
+private data class CityPointData(
     val point: Point,
     val direction: Direction,
     val directionSteps: Int,
