@@ -16,4 +16,10 @@ enum class Direction {
             LEFT -> RIGHT
             RIGHT -> LEFT
         }
+
+    fun others(): List<Direction> = ALL - this
+
+    companion object {
+        val ALL = listOf(TOP, BOTTOM, LEFT, RIGHT)
+    }
 }

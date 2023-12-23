@@ -12,6 +12,9 @@ fun <T : Any> List<T>.splitWhen(predicate: (T) -> Boolean): List<List<T>> =
 inline fun <T, R> List<List<T>>.mapAll(transform: (T) -> R): List<List<R>> =
     this.map { row -> row.map { transform(it) } }
 
+inline fun <T, R> List<List<T>>.mapAllIndexed(transform: (index: Point, T) -> R): List<List<R>> =
+    this.mapIndexed { y, row -> row.mapIndexed { x, value -> transform(Point(x = x, y = y), value) } }
+
 fun <T> List<List<T>>.toMutableNestedList(): MutableList<MutableList<T>> =
     this.map { row -> row.toMutableList() }.toMutableList()
 

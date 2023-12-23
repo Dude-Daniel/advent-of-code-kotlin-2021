@@ -24,6 +24,9 @@ inline fun <T> MutableGrid2D(columns: Int, rows: Int, init: (point: Point) -> T)
 inline fun <T, R> Grid2D<T>.mapValues(transform: (T) -> R): Grid2D<R> =
     Grid2D(values = getRawValues().mapAll(transform))
 
+inline fun <T, R> Grid2D<T>.mapValuesIndexed(transform: (index: Point, T) -> R): Grid2D<R> =
+    Grid2D(values = getRawValues().mapAllIndexed(transform))
+
 fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
 
@@ -75,6 +78,8 @@ interface Grid2D<out T> : Collection<T> {
      * The last point (max x/y) in the grid.
      */
     val requireLastPoint: Point
+
+    fun pointOfIndex(index: Int): Point = Point(x = index % rows, y = index / rows)
 
     operator fun get(point: Point): T
     fun getOrNull(point: Point): T?
