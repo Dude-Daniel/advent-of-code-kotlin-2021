@@ -2,32 +2,45 @@ package de.devdudes.aoc.aoc2016.days
 
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.minus
+import de.devdudes.aoc.helpers.transpose
 
 class Day06 : Day(
-    description = 6 - "Unknown",
-    ignored = true,
+    description = 6 - "Signals and Noise",
+    ignored = false,
     days = {
         puzzle(
-            description = 1 - "Unknown",
+            description = 1 - "Most Common Characters",
             input = "day06",
             testInput = "day06_test",
-            expectedTestResult = Unit,
-            solutionResult = Unit,
+            expectedTestResult = "easter",
+            solutionResult = "usccerug",
             solution = { input ->
-                // not implemented yet
-                TODO()
+                input.map { it.toCharArray().toList() }
+                    .transpose()
+                    .map { rowChars ->
+                        rowChars.groupBy { it }
+                            .maxBy { it.value.size }
+                            .key
+                    }
+                    .joinToString("")
             }
         )
 
         puzzle(
-            description = 2 - "Unknown",
+            description = 2 - "Least Common Characters",
             input = "day06",
             testInput = "day06_test",
-            expectedTestResult = Unit,
-            solutionResult = Unit,
+            expectedTestResult = "advent",
+            solutionResult = "cnvvtafc",
             solution = { input ->
-                // not implemented yet
-                TODO()
+                input.map { it.toCharArray().toList() }
+                    .transpose()
+                    .map { rowChars ->
+                        rowChars.groupBy { it }
+                            .minBy { it.value.size }
+                            .key
+                    }
+                    .joinToString("")
             }
         )
     }
