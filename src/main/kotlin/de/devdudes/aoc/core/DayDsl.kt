@@ -14,7 +14,7 @@ class DayDsl {
         testInput: String,
         expectedTestResult: Any,
         solutionResult: Any = Unit,
-        solution: (List<String>) -> Any,
+        solution: PuzzleScope.(List<String>) -> Any,
     ) {
         puzzles.add(
             Puzzle(

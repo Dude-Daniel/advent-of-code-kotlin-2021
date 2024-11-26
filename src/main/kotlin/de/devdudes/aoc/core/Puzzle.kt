@@ -20,21 +20,23 @@ class Puzzle(
     val testInput: String,
     val expectedTestResult: Any,
     val solutionResult: Any,
-    val solution: (List<String>) -> Any,
+    val solution: PuzzleScope.(List<String>) -> Any,
 ) {
-    fun test(resourceFolder: String): Any = solution(
-        lines(
-            fileName = testInput,
-            resourceFolder = resourceFolder,
+    fun test(resourceFolder: String): Any =
+        PuzzleScope(isTest = true).solution(
+            lines(
+                fileName = testInput,
+                resourceFolder = resourceFolder,
+            )
         )
-    )
 
-    fun solve(resourceFolder: String): Any = solution(
-        lines(
-            fileName = input,
-            resourceFolder = resourceFolder,
+    fun solve(resourceFolder: String): Any =
+        PuzzleScope(isTest = false).solution(
+            lines(
+                fileName = input,
+                resourceFolder = resourceFolder,
+            )
         )
-    )
 
     private fun lines(fileName: String, resourceFolder: String): List<String> {
         val resourceFile = "$resourceFolder/$fileName.txt"
@@ -45,3 +47,5 @@ class Puzzle(
         return File(uri).readLines()
     }
 }
+
+data class PuzzleScope(val isTest: Boolean)
