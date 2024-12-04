@@ -30,6 +30,8 @@ inline fun <T, R> Grid2D<T>.mapValuesIndexed(transform: (index: Point, T) -> R):
 fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
 
+fun <T> Grid2D<T>.transpose(): Grid2D<T> = Grid2D(getRawValues().transpose())
+
 // foreach functions
 
 inline fun <T> Grid2D<T>.forEachIndexed(action: (point: Point, T) -> Unit) {
@@ -39,6 +41,17 @@ inline fun <T> Grid2D<T>.forEachIndexed(action: (point: Point, T) -> Unit) {
             action(Point(x = x, y = y), get(point))
         }
     }
+}
+
+// contains functions
+
+fun <T> Grid2D<T>.contains(values: Collection<T>, pointAt: (index: Int) -> Point): Boolean {
+    values.forEachIndexed { index, expectedValue ->
+        val point = pointAt(index)
+        val actualValue = this.getOrNull(point) ?: return false // point is out of range
+        if (expectedValue != actualValue) return false // value does not match
+    }
+    return true
 }
 
 // print functions

@@ -21,6 +21,16 @@ fun Point.move(direction: Direction, distance: Int = 1): Point =
         Direction.RIGHT -> copy(x = x + distance)
     }
 
+fun Point.moveTop(distance: Int = 1): Point = move(direction = Direction.TOP, distance = distance)
+fun Point.moveBottom(distance: Int = 1): Point = move(direction = Direction.BOTTOM, distance = distance)
+fun Point.moveLeft(distance: Int = 1): Point = move(direction = Direction.LEFT, distance = distance)
+fun Point.moveRight(distance: Int = 1): Point = move(direction = Direction.RIGHT, distance = distance)
+
+fun Point.moveTopLeft(distance: Int = 1): Point = moveTop(distance).moveLeft(distance)
+fun Point.moveTopRight(distance: Int = 1): Point = moveTop(distance).moveRight(distance)
+fun Point.moveBottomLeft(distance: Int = 1): Point = moveBottom(distance).moveLeft(distance)
+fun Point.moveBottomRight(distance: Int = 1): Point = moveBottom(distance).moveRight(distance)
+
 operator fun Point.rangeTo(next: Point): List<Point> =
     buildList {
         for (currentX in min(x, next.x)..max(x, next.x)) {
