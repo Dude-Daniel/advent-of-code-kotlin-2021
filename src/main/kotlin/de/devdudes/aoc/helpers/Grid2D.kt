@@ -1,9 +1,12 @@
 package de.devdudes.aoc.helpers
 
-// creator functions
+// factory functions
 
 fun <T> emptyGrid(): Grid2D<T> = Grid2D(emptyList())
+fun <T> emptyMutableGrid(): MutableGrid2D<T> = MutableGrid2D(emptyList())
+
 fun <T> List<List<T>>.toGrid(): Grid2D<T> = Grid2D(this)
+fun <T> List<List<T>>.toMutableGrid(): MutableGrid2D<T> = MutableGrid2D(this)
 
 fun <T> Grid2D(values: List<List<T>>): Grid2D<T> = Grid2DImpl(values)
 fun <T> MutableGrid2D(values: List<List<T>>): MutableGrid2D<T> = MutableGrid2DImpl(values.toMutableNestedList())
@@ -31,6 +34,18 @@ fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
 
 fun <T> Grid2D<T>.transpose(): Grid2D<T> = Grid2D(getRawValues().transpose())
+
+// find / search functions
+
+fun <T> Grid2D<T>.positionOf(predicate: (T) -> Boolean): Point? {
+    for (x in 0 until columns) {
+        for (y in 0 until rows) {
+            val point = Point(x = x, y = y)
+            if (predicate(get(point))) return point
+        }
+    }
+    return null
+}
 
 // foreach functions
 
