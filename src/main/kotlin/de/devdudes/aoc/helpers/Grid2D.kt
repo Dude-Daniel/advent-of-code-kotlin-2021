@@ -30,6 +30,18 @@ inline fun <T, R> Grid2D<T>.mapValues(transform: (T) -> R): Grid2D<R> =
 inline fun <T, R> Grid2D<T>.mapValuesIndexed(transform: (index: Point, T) -> R): Grid2D<R> =
     Grid2D(values = getRawValues().mapAllIndexed(transform))
 
+inline fun <T, R> Grid2D<T>.mapValuesIndexedNotNull(transform: (index: Point, T) -> R?): List<R> {
+    val result = mutableListOf<R>()
+    for (x in 0 until columns) {
+        for (y in 0 until rows) {
+            val point = Point(x = x, y = y)
+            val value = transform(point, get(point))
+            if (value != null) result.add(value)
+        }
+    }
+    return result
+}
+
 fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
 
@@ -117,6 +129,7 @@ interface Grid2D<out T> : Collection<T> {
 
 interface MutableGrid2D<T> : Grid2D<T> {
     operator fun set(position: Point, element: T): T
+    fun replace(position: Point, element: T): T?
 }
 
 abstract class Grid2DBase<T> : Grid2D<T> {
@@ -154,6 +167,14 @@ data class MutableGrid2DImpl<T>(val values: MutableList<MutableList<T>>) : Grid2
     override fun set(position: Point, element: T): T {
         val old = values[position.y][position.x]
         values[position.y][position.x] = element
+        return old
+    }
+
+    override fun replace(position: Point, element: T): T? {
+        val old = getOrNull(position)
+        if (contains(position)) {
+            values[position.y][position.x] = element
+        }
         return old
     }
 }
