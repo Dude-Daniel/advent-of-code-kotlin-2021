@@ -1,5 +1,8 @@
 package de.devdudes.aoc.helpers
 
+import kotlin.math.abs
+import kotlin.math.log10
+
 /**
  * Calculate the greatest common divisor.
  */
@@ -36,3 +39,29 @@ infix fun Long.concat(other: Long): Long {
     }
     return this * aScale + other
 }
+
+/**
+ * Returns the number of digits.
+ */
+fun Int.length(): Int = when (this) {
+    0 -> 1
+    else -> log10(abs(toDouble())).toInt() + 1
+}
+
+/**
+ * Returns the number of digits.
+ */
+fun Long.length(): Int = when (this) {
+    0L -> 1
+    else -> log10(abs(toDouble())).toInt() + 1
+}
+
+/**
+ * Returns true if the number is even.
+ */
+fun Int.isEven(): Boolean = this % 2 == 0
+
+/**
+ * Returns true if the number is odd.
+ */
+fun Int.isOdd(): Boolean = this % 2 == 1
