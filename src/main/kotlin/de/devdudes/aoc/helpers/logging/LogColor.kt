@@ -16,6 +16,8 @@ sealed class LogColor(val rawColor: String) {
     data object Magenta : LogColor("5")
     data object Cyan : LogColor("6")
 
+    data class Raw(val id: Int) : LogColor(id.toString())
+
     sealed class GreyScale(rawColor: String) : LogColor(rawColor) {
         data object Grey01 : LogColor("255")
         data object Grey02 : LogColor("254")
@@ -41,6 +43,10 @@ sealed class LogColor(val rawColor: String) {
         data object Grey22 : LogColor("234")
         data object Grey23 : LogColor("233")
         data object Grey24 : LogColor("232")
+    }
+
+    companion object {
+        val AllColors: List<Raw> = List(231) { Raw(it) }
     }
 }
 
