@@ -1,5 +1,6 @@
 package de.devdudes.aoc.helpers
 
+import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.log10
 
@@ -65,3 +66,16 @@ fun Int.isEven(): Boolean = this % 2 == 0
  * Returns true if the number is odd.
  */
 fun Int.isOdd(): Boolean = this % 2 == 1
+
+/**
+ * Returns true if the number is odd.
+ */
+fun Float.isWholeNumber(): Boolean {
+    val asLong = this.toLong()
+    return this == asLong.toFloat()
+}
+
+/**
+ * Returns true if the number is odd.
+ */
+fun BigDecimal.isWholeNumber(): Boolean = stripTrailingZeros().scale() <= 0
