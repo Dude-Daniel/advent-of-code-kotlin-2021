@@ -13,6 +13,7 @@ data class Point3D(val x: Int, val y: Int, val z: Int) {
 
 operator fun Point.minus(other: Point): Point = Point(x = x - other.x, y = y - other.y)
 operator fun Point.plus(other: Point): Point = Point(x = x + other.x, y = y + other.y)
+operator fun Point.times(other: Int): Point = Point(x = x * other, y = y * other)
 
 fun Point.move(direction: Direction, distance: Int = 1): Point =
     when (direction) {
