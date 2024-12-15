@@ -65,5 +65,6 @@ class DirectionParser(
         val UDLR = DirectionParser(top = "U", bottom = "D", left = "L", right = "R")
         val tplr = DirectionParser(top = "t", bottom = "b", left = "l", right = "r")
         val TBLR = DirectionParser(top = "T", bottom = "B", left = "L", right = "R")
+        val ARROWS = DirectionParser(top = "^", bottom = "v", left = "<", right = ">")
     }
 }
