@@ -56,9 +56,15 @@ fun String.colored(color: String): String = "\u001B[38;5;${color}m" + this + "\u
 fun String.background(color: LogColor): String = background(color.rawColor)
 fun String.background(color: String): String = "\u001B[48;5;${color}m" + this + "\u001B[0m"
 
-fun greyscale(value: Int, range: Int = greys().size): LogColor {
-    val index = ((greys().size.toFloat() / range.toFloat()) * value).toInt()
-    return greys()[index]
+enum class GreyScaleMode { LIGHT_TO_DARK, DARK_TO_LIGHT }
+
+fun greyscale(value: Int, range: Int = greys().size, mode: GreyScaleMode = GreyScaleMode.DARK_TO_LIGHT): LogColor {
+    val greys = greys()
+    val index = ((greys.size.toFloat() / (range + 1).toFloat()) * value).toInt()
+    return when (mode) {
+        GreyScaleMode.LIGHT_TO_DARK -> greys[greys.lastIndex - index]
+        GreyScaleMode.DARK_TO_LIGHT -> greys[index]
+    }
 }
 
 private fun greys() = listOf(
