@@ -5,7 +5,7 @@ import de.devdudes.aoc.core.minus
 import de.devdudes.aoc.helpers.Direction
 import de.devdudes.aoc.helpers.Grid2D
 import de.devdudes.aoc.helpers.Point
-import de.devdudes.aoc.helpers.logging.GreyScaleMode
+import de.devdudes.aoc.helpers.logging.GradientDirection
 import de.devdudes.aoc.helpers.logging.LogColor
 import de.devdudes.aoc.helpers.logging.colored
 import de.devdudes.aoc.helpers.logging.greyscale
@@ -182,7 +182,7 @@ private class ReindeerMaze(
                 tile is Tile.Path -> {
                     val color = when {
                         pathToEnd.contains(point) -> LogColor.Red
-                        isSolved -> greyscale(tile.scoreToEnd, maxScore, GreyScaleMode.LIGHT_TO_DARK)
+                        isSolved -> greyscale(tile.scoreToEnd, maxScore, GradientDirection.LIGHT_TO_DARK)
                         else -> LogColor.Blue
                     }
                     "▪".colored(color)
