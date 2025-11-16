@@ -15,11 +15,11 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(17)
 }
 
 tasks {
     wrapper {
-        gradleVersion = "8.2"
+        gradleVersion = "8.5"
     }
 }
