@@ -10,6 +10,7 @@ import de.devdudes.aoc.aoc2021.AdventOfCode2021
 import de.devdudes.aoc.aoc2022.AdventOfCode2022
 import de.devdudes.aoc.aoc2023.AdventOfCode2023
 import de.devdudes.aoc.aoc2024.AdventOfCode2024
+import de.devdudes.aoc.aoc2025.AdventOfCode2025
 
 /**
  * Object for defining the main function which solves all days which are implemented (days that are not ignored).
@@ -108,5 +109,15 @@ object SolveAllDays2024 {
     @JvmStatic
     fun main(args: Array<String>) {
         AdventOfCode2024().solveAllDays()
+    }
+}
+
+/**
+ * Object for defining the main function which solves all days which are implemented (days that are not ignored).
+ */
+object SolveAllDays2025 {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        AdventOfCode2025().solveAllDays()
     }
 }
