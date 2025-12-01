@@ -12,19 +12,6 @@ import de.devdudes.aoc.aoc2025.days.Day09
 import de.devdudes.aoc.aoc2025.days.Day10
 import de.devdudes.aoc.aoc2025.days.Day11
 import de.devdudes.aoc.aoc2025.days.Day12
-import de.devdudes.aoc.aoc2025.days.Day13
-import de.devdudes.aoc.aoc2025.days.Day14
-import de.devdudes.aoc.aoc2025.days.Day15
-import de.devdudes.aoc.aoc2025.days.Day16
-import de.devdudes.aoc.aoc2025.days.Day17
-import de.devdudes.aoc.aoc2025.days.Day18
-import de.devdudes.aoc.aoc2025.days.Day19
-import de.devdudes.aoc.aoc2025.days.Day20
-import de.devdudes.aoc.aoc2025.days.Day21
-import de.devdudes.aoc.aoc2025.days.Day22
-import de.devdudes.aoc.aoc2025.days.Day23
-import de.devdudes.aoc.aoc2025.days.Day24
-import de.devdudes.aoc.aoc2025.days.Day25
 import de.devdudes.aoc.core.Day
 import de.devdudes.aoc.core.Year
 
@@ -47,18 +34,5 @@ class AdventOfCode2025 : Year(resourceFolder = "2025") {
             Day10(),
             Day11(),
             Day12(),
-            Day13(),
-            Day14(),
-            Day15(),
-            Day16(),
-            Day17(),
-            Day18(),
-            Day19(),
-            Day20(),
-            Day21(),
-            Day22(),
-            Day23(),
-            Day24(),
-            Day25(),
         )
 }
