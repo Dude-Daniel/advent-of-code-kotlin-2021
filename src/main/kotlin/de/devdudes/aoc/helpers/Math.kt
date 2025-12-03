@@ -42,6 +42,36 @@ infix fun Long.concat(other: Long): Long {
 }
 
 /**
+ * Returns a new [Long] containing the first [count] digits of the given value. i.e. 12345 with a count of 2 returns 12.
+ */
+fun Long.takeDigits(count: Int): Long = "$this".take(count).toLongOrNull() ?: 0L
+
+/**
+ * Returns a new [Long] with the first [count] digits removed. i.e. 12345 with a count of 2 returns 345.
+ */
+fun Long.dropDigits(count: Int): Long = "$this".drop(count).toLong()
+
+/**
+ * Returns a new [Long] containing the last [count] digits of the given value. i.e. 12345 with a count of 2 returns 45.
+ */
+fun Long.takeLastDigits(count: Int): Long = "$this".takeLast(count).toLong()
+
+/**
+ * Returns a new [Long] with the last [count] digits removed. i.e. 12345 with a count of 2 returns 123.
+ */
+fun Long.dropLastDigits(count: Int): Long = "$this".dropLast(count).toLong()
+
+/**
+ * Splits the given number at the given [position]. i.e. 12 with a position of 1 returns 1 and 2.
+ */
+fun Long.split(position: Int): Pair<Long, Long> {
+    val string = "$this"
+    val left = string.take(position).toLong()
+    val right = string.drop(position).toLong()
+    return left to right
+}
+
+/**
  * Returns the number of digits.
  */
 fun Int.length(): Int = when (this) {
