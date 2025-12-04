@@ -22,6 +22,69 @@ inline fun <T> MutableGrid2D(columns: Int, rows: Int, init: (point: Point) -> T)
     }.let(::MutableGrid2D)
 }
 
+// subset functions
+
+/**
+ * Returns the 4 neighbor elements as a new grid. All values that are not part of the 4 neighborhood will be set to [emptyValue].
+ * The resulting grid may be smaller then the given size in case the area overlaps the current grid.
+ */
+fun <T> Grid2D<T>.neighborFour(center: Point, emptyValue: T, containsCenter: Boolean = false): Grid2D<T> =
+    subGrid(
+        center = center,
+        rangeX = 1,
+        rangeY = 1,
+    ).let { grid ->
+        val targetCenter = Point(
+            x = if (center.x == 0) 0 else 1,
+            y = if (center.y == 0) 0 else 1,
+        )
+        grid.edit {
+            replace(targetCenter.moveTopLeft(1), emptyValue)
+            replace(targetCenter.moveTopRight(1), emptyValue)
+            if (!containsCenter) replace(targetCenter, emptyValue)
+            replace(targetCenter.moveBottomLeft(1), emptyValue)
+            replace(targetCenter.moveBottomRight(1), emptyValue)
+        }
+    }
+
+/**
+ * Returns the 8 neighbor elements as a new grid. The value of the [center] point will be set to [emptyValue].
+ * The resulting grid may be smaller then the given size in case the area overlaps the current grid.
+ */
+fun <T> Grid2D<T>.neighborEight(center: Point, emptyValue: T, containsCenter: Boolean = false): Grid2D<T> =
+    subGrid(
+        center = center,
+        rangeX = 1,
+        rangeY = 1,
+    ).let { grid ->
+        val targetCenter = Point(
+            x = if (center.x == 0) 0 else 1,
+            y = if (center.y == 0) 0 else 1,
+        )
+        grid.edit {
+            if (!containsCenter) replace(targetCenter, emptyValue)
+        }
+    }
+
+/**
+ * Returns the area around [center] with a size of [rangeX] and [rangeY] of the current grid as a new grid.
+ * The resulting grid may be smaller then the given size in case the area overlaps the current grid.
+ */
+fun <T> Grid2D<T>.subGrid(
+    center: Point,
+    rangeX: Int,
+    rangeY: Int,
+): Grid2D<T> {
+    val xRange = (center.x - rangeX).coerceAtLeast(0)..(center.x + rangeX).coerceAtMost(columns - 1)
+    val yRange = (center.y - rangeY).coerceAtLeast(0)..(center.y + rangeY).coerceAtMost(rows - 1)
+
+    return yRange.map { y ->
+        xRange.map { x ->
+            get(Point(x = x, y = y))
+        }
+    }.toGrid()
+}
+
 // mapping functions
 
 inline fun <T, R> Grid2D<T>.mapValues(transform: (T) -> R): Grid2D<R> =
@@ -44,6 +107,12 @@ inline fun <T, R> Grid2D<T>.mapValuesIndexedNotNull(transform: (index: Point, T)
 
 fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
+
+fun <T> Grid2D<T>.edit(block: MutableGrid2D<T>.() -> Unit): Grid2D<T> =
+    toMutableGrid().let {
+        it.block()
+        Grid2D(it.getRawValues())
+    }
 
 fun <T> Grid2D<T>.transpose(): Grid2D<T> = Grid2D(getRawValues().transpose())
 
@@ -79,6 +148,21 @@ fun <T> Grid2D<T>.contains(values: Collection<T>, pointAt: (index: Int) -> Point
         if (expectedValue != actualValue) return false // value does not match
     }
     return true
+}
+
+// delta functions
+
+fun <T> Grid2D<T>.subtractMatching(other: Grid2D<T>, default: T): Grid2D<T> {
+    if (this.rows != other.rows) error("sizes of both grids are different")
+    if (this.columns != other.columns) error("sizes of both grids are different")
+
+    return mapValuesIndexed { point, value ->
+        val otherValue = other[point]
+        when (value) {
+            otherValue -> default
+            else -> value
+        }
+    }
 }
 
 // print functions

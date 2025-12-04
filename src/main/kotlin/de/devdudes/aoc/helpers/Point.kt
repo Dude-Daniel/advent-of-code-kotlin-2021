@@ -1,5 +1,6 @@
 package de.devdudes.aoc.helpers
 
+import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
 
@@ -14,6 +15,11 @@ data class Point3D(val x: Int, val y: Int, val z: Int) {
 operator fun Point.minus(other: Point): Point = Point(x = x - other.x, y = y - other.y)
 operator fun Point.plus(other: Point): Point = Point(x = x + other.x, y = y + other.y)
 operator fun Point.times(other: Int): Point = Point(x = x * other, y = y * other)
+
+fun Point.distanceTo(other: Point): Int {
+    val delta = this - other
+    return delta.x.absoluteValue + delta.y.absoluteValue
+}
 
 fun Point.move(direction: Direction, distance: Int = 1): Point =
     when (direction) {
@@ -41,3 +47,66 @@ operator fun Point.rangeTo(next: Point): List<Point> =
             }
         }
     }
+
+/**
+ * Return the points around the given point in a 4 neighborhood relationship.
+ */
+fun Point.neighborFour(includesCurrentPoint: Boolean = false): Set<Point> =
+    surroundingPoints(
+        rangePerAxis = 1,
+        limitDistanceByRange = true,
+        includesCurrentPoint = includesCurrentPoint,
+    )
+
+/**
+ * Return the points around the given point in a 8 neighborhood relationship.
+ */
+fun Point.neighborEight(includesCurrentPoint: Boolean = false): Set<Point> =
+    surroundingPoints(
+        rangePerAxis = 1,
+        limitDistanceByRange = false,
+        includesCurrentPoint = includesCurrentPoint,
+    )
+
+fun Point.surroundingPoints(rangePerAxis: Int, limitDistanceByRange: Boolean = true, includesCurrentPoint: Boolean = false): Set<Point> =
+    surroundingPoints(
+        rangeX = rangePerAxis,
+        rangeY = rangePerAxis,
+        limitDistanceByRange = limitDistanceByRange,
+        includesCurrentPoint = includesCurrentPoint,
+    )
+
+/**
+ * Returns the points around the given point within the given range [rangeX] and [rangeY] from the current point. When [limitDistanceByRange] is false
+ * then the resulting points will cover a rectangle within the given range.
+ *
+ * If [limitDistanceByRange] is true then the maximum range (of [rangeX] and [rangeY]) is used to determine the maximum distance from the given point to
+ * all the surrounding points (i.e. a max range of 3 means that any surrounding point can be reached by moving 3 steps into horizontal or vertical directions
+ * starting from the center).
+ */
+fun Point.surroundingPoints(
+    rangeX: Int,
+    rangeY: Int,
+    limitDistanceByRange: Boolean = false,
+    includesCurrentPoint: Boolean = false,
+): Set<Point> {
+    val xRange = (x - rangeX)..(x + rangeX)
+    val yRange = (y - rangeY)..(y + rangeY)
+    val maxDistance = max(rangeX, rangeY)
+
+    return buildSet {
+        yRange.forEach { yPosition ->
+            xRange.forEach { xPosition ->
+                val pointToAdd = Point(xPosition, yPosition)
+                val currentDistance = pointToAdd.distanceTo(this@surroundingPoints)
+
+                val matchesDistanceCondition = !limitDistanceByRange || currentDistance <= maxDistance
+                val matchesCurrentPointCondition = includesCurrentPoint || pointToAdd != this@surroundingPoints
+
+                if (matchesDistanceCondition && matchesCurrentPointCondition) {
+                    add(pointToAdd)
+                }
+            }
+        }
+    }
+}
