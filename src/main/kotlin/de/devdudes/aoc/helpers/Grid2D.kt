@@ -108,6 +108,9 @@ inline fun <T, R> Grid2D<T>.mapValuesIndexedNotNull(transform: (index: Point, T)
 fun <T> Grid2D<T>.toMutableGrid(): MutableGrid2D<T> =
     MutableGrid2D(values = getRawValues().toMutableNestedList())
 
+fun <T> MutableGrid2D<T>.copy(): MutableGrid2D<T> =
+    MutableGrid2D(values = getRawValues().toMutableNestedList())
+
 fun <T> Grid2D<T>.edit(block: MutableGrid2D<T>.() -> Unit): Grid2D<T> =
     toMutableGrid().let {
         it.block()
