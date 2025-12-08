@@ -109,3 +109,25 @@ fun Float.isWholeNumber(): Boolean {
  * Returns true if the number is odd.
  */
 fun BigDecimal.isWholeNumber(): Boolean = stripTrailingZeros().scale() <= 0
+
+@OptIn(kotlin.experimental.ExperimentalTypeInference::class)
+@OverloadResolutionByLambdaReturnType
+@JvmName("productOfInt")
+inline fun <T> Iterable<T>.productOf(selector: (T) -> Int): Int {
+    var product = 1
+    for (element in this) {
+        product *= selector(element)
+    }
+    return product
+}
+
+@OptIn(kotlin.experimental.ExperimentalTypeInference::class)
+@OverloadResolutionByLambdaReturnType
+@JvmName("productOfLong")
+inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long {
+    var product = 1L
+    for (element in this) {
+        product *= selector(element)
+    }
+    return product
+}

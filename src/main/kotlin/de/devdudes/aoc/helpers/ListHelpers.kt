@@ -10,6 +10,93 @@ fun <T : Any> List<T>.splitWhen(predicate: (T) -> Boolean): List<List<T>> =
     }.windowed(size = 2, step = 2) { (from, to) -> this.slice(from..to) }
 
 /**
+ * Returns the permutations of this list. i.e.
+ * ```
+ * List: A,B,C
+ * Permutations: A,B,C
+ *               A,C,B
+ *               B,A,C
+ *               B,C,A
+ *               C,B,A
+ *               C,A,B
+ * ```
+ */
+fun <T : Any> List<T>.permutations(): List<List<T>> {
+    fun MutableList<List<T>>.addPermutationsRecursive(input: MutableList<T>, index: Int) {
+        if (index == input.lastIndex) {
+            add(input.toList())
+        }
+
+        for (i in index..input.lastIndex) {
+            input.swap(from = index, to = i)
+            addPermutationsRecursive(input, index + 1)
+            input.swap(from = i, to = index)
+        }
+    }
+
+    val solutions = mutableListOf<List<T>>()
+    solutions.addPermutationsRecursive(this.toMutableList(), 0)
+    return solutions
+}
+
+
+/**
+ * Returns all possible subLists of size [size].
+ */
+fun <T : Any> Iterable<T>.combinations(size: Int = 2): List<List<T>> {
+    val items = this as? List<T> ?: toList()
+    val itemCount = items.size
+
+    if (size > itemCount) {
+        return emptyList()
+    }
+
+    /**
+     * For obtaining all combinations of arbitrary size a list of indices is used. Each of these indices act as a pointer pointing to one element (its index)
+     * in the list. Pointers are moved forward by one step. When the end is reached they are reset to the next position + 1. This results in the following
+     * pattern (example for 3 pointers):
+     * ```
+     *            Items: 1,2,3,4,5
+     * Pointer Movement: ^ ^ ^      [1,2,3]
+     *                   ^ ^   ^    [1,2,4]
+     *                   ^ ^     ^  [1,2,5]
+     *                   ^   ^ ^    [1,3,4]
+     *                   ^   ^   ^  [1,3,5]
+     *                   ^     ^ ^  [1,4,5]
+     *                     ^ ^ ^    [2,3,4]
+     *                     ^ ^   ^  [2,3,5]
+     *                     ^   ^ ^  [2,4,5]
+     *                       ^ ^ ^  [3,4,5]
+     * ```
+     */
+    fun MutableList<List<T>>.iterateIndex(indices: IntArray, index: Int, startOffset: Int) {
+        val lastItemIndexToCoverByCurrentIndex = itemCount - size + index
+        val currentIndexStart = index + startOffset
+
+        for (currentIndex in currentIndexStart..lastItemIndexToCoverByCurrentIndex) {
+            indices[index] = currentIndex
+
+            if (index == size - 1) {
+                // last element in indices
+                add(indices.map { items[it] })
+            } else {
+                iterateIndex(
+                    indices = indices,
+                    index = index + 1,
+                    startOffset = startOffset + currentIndex - currentIndexStart,
+                )
+            }
+        }
+        indices[index] = currentIndexStart
+    }
+
+    return buildList {
+        val indices = (0 until size).toList().toIntArray()
+        iterateIndex(indices = indices, index = 0, startOffset = 0)
+    }
+}
+
+/**
  * Splits the Strings inside the given list at all positions where the given [predicate] matches all these String.
  */
 fun List<String>.splitAtMatchingPositions(predicate: (Char) -> Boolean): List<List<String>> {
@@ -68,6 +155,10 @@ fun <T : Any> List<List<T>>.duplicateEntry(predicate: (List<T>) -> Boolean): Lis
             if (predicate(items)) add(items)
         }
     }.flatten()
+
+fun <T : Any> MutableList<T>.swap(from: Int, to: Int) {
+    this[from] = this.set(to, this[from])
+}
 
 fun <T> List<List<T>>.printGrid(
     separator: CharSequence = "",
