@@ -47,3 +47,21 @@ data class Line(val from: Point, val to: Point) {
 }
 
 infix fun Point.lineTo(to: Point): Line = Line(this, to)
+
+infix fun Point.axisBoundLineTo(to: Point): AxisBoundLine =
+    when {
+        this.x == to.x -> AxisBoundLine.VerticalLine(x = this.x, fromY = this.y, toY = to.y)
+        this.y == to.y -> AxisBoundLine.HorizontalLine(y = this.y, fromX = this.x, toX = to.x)
+        else -> error("given points are not on the same axis: [$this, $to]")
+    }
+
+sealed class AxisBoundLine {
+    data class HorizontalLine(val fromX: Int, val toX: Int, val y: Int) : AxisBoundLine()
+    data class VerticalLine(val x: Int, val fromY: Int, val toY: Int) : AxisBoundLine()
+
+    fun toLine() : Line =
+        when(this){
+            is HorizontalLine -> Point(fromX,y) lineTo Point(toX,y)
+            is VerticalLine -> Point(x,fromY) lineTo Point(x,toY)
+        }
+}
