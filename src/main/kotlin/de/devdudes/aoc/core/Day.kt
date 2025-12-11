@@ -1,7 +1,6 @@
 package de.devdudes.aoc.core
 
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import de.devdudes.aoc.core.Utils.formatDuration
 import kotlin.system.measureTimeMillis
 
 /**
@@ -90,10 +89,5 @@ abstract class Day(
     private fun print(message: String) = println("$dayTag $message")
     private fun Puzzle.printPuzzle(message: String) {
         println("$dayTag [Puzzle ${description.value} - ${description.name}] $message")
-    }
-
-    private fun formatDuration(durationInMillis: Long): String {
-        val calendar = Calendar.getInstance().apply { timeInMillis = durationInMillis }
-        return SimpleDateFormat("mm:ss:SSS").format(calendar.time)
     }
 }

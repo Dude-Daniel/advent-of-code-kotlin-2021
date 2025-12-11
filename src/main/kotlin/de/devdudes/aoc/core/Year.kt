@@ -1,5 +1,8 @@
 package de.devdudes.aoc.core
 
+import de.devdudes.aoc.core.Utils.formatDuration
+import kotlin.system.measureTimeMillis
+
 abstract class Year(val resourceFolder: String) {
 
     abstract val days: List<Day>
@@ -10,7 +13,11 @@ abstract class Year(val resourceFolder: String) {
     }
 
     fun solveAllDays() {
-        days.forEach { day -> day.solve(resourceFolder) }
+        val totalDuration = measureTimeMillis {
+            days.forEach { day -> day.solve(resourceFolder) }
+        }
+
+        println("All Days of $resourceFolder solved in: ${formatDuration(totalDuration)}")
 
         printIgnoredDays(days)
     }
