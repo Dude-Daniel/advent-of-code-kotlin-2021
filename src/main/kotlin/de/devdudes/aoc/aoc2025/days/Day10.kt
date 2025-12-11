@@ -31,9 +31,9 @@ class Day10 : Day(
                 // Therefore z3 is used here.
 
                 // 1. uncomment this line to print the z3 commands
-                parseFactory(input).machines.forEach { machineConfig ->
-                    println(machineConfig.buildZ3Commands())
-                }
+                // parseFactory(input).machines.forEach { machineConfig ->
+                //     println(machineConfig.buildZ3Commands())
+                // }
 
                 // 2. parsing the results of z3 and solving the puzzle
                 parseZ3Result(if (isTest) z3ResponseTestData else z3ResponsePuzzleData).sum()
